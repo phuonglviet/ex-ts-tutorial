@@ -1,0 +1,38 @@
+{
+  "name": "ex-ts-tutorial",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "_start": "node ./bin/www",
+    "__start": "node ./dist/bin/www.js",
+    "start": "nodemon ./bin/www",
+    "_debug": "node --inspect ./dist/bin/www.js",
+    "debug": "nodemon --inspect ./bin/www",
+    "_prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
+    "build": "npm run build-ts && npm run copy-static-assets",
+    "build-ts": "tsc",
+    "tslint": "tslint -c tslint.json -p tsconfig.json",
+    "copy-static-assets": "ts-node copyStaticAssets.ts"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "http-errors": "~1.6.3",
+    "morgan": "~1.9.1",
+    "pug": "2.0.0-beta11",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "@types/cookie-parser": "^1.4.1",
+    "@types/express": "^4.17.0",
+    "@types/http-errors": "^1.6.1",
+    "@types/moment": "^2.13.0",
+    "@types/morgan": "^1.7.35",
+    "@types/node": "^12.0.12",
+    "shelljs": "^0.8.1",
+    "ts-node": "^5.0.1",
+    "tslint": "^5.18.0",
+    "typescript": "^2.9.2"
+  }
+}
