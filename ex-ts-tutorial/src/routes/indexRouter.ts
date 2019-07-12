@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response, Router } from "express";
+import { Request, Response, Router, NextFunction } from "express";
 import { BaseRouter } from "./baseRouter"
 
 export class IndexRouter extends BaseRouter {
@@ -33,8 +33,8 @@ export class IndexRouter extends BaseRouter {
     /* GET home page. */
     router.get("/", (req: Request, res: Response, next: NextFunction) => {
       try {
-        res.render("index", { title: "Express" });
-        // res.redirect('/catalog');
+        // res.render("index", { title: "Express" });
+        res.redirect('/catalog');
       } catch (err) {
         next(err);
       }

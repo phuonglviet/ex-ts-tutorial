@@ -7,6 +7,7 @@ import * as logger from 'morgan';
 import { MongooseConn } from "./mongooseConn";
 
 import { IndexRouter } from "./routes/indexRouter";
+import { CatalogRouter } from "./routes/catalogRouter";
 
 /**
  * Application.
@@ -61,6 +62,7 @@ export class App {
      */
     private setRoutes(): void {
         this.app.use('/', new IndexRouter().create());
+        this.app.use('/catalog', new CatalogRouter().create());
     }
 
     /**
