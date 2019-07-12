@@ -6,10 +6,7 @@ import * as logger from 'morgan';
 
 import { MongooseConn } from "./mongooseConn";
 
-import { IndexRouter } from "./routes/index";
-// import { IndexController } from "./controllers/index";
-// import * as router from "./routes/index";
-// import { router } from "./routes/index";
+import { IndexRouter } from "./routes/indexRouter";
 
 /**
  * Application.

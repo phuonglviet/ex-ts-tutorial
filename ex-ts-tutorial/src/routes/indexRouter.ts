@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response, Router } from "express";
-import { BaseRouter } from "./base"
+import { BaseRouter } from "./baseRouter"
 
 export class IndexRouter extends BaseRouter {
 
