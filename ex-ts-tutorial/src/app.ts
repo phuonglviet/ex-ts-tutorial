@@ -6,9 +6,10 @@ import * as logger from 'morgan';
 
 import { MongooseConn } from "./mongooseConn";
 
+import { IndexRouter } from "./routes/index";
 // import { IndexController } from "./controllers/index";
-//import * as router from "./routes/index";
-import { router } from "./routes/index";
+// import * as router from "./routes/index";
+// import { router } from "./routes/index";
 
 /**
  * Application.
@@ -16,6 +17,16 @@ import { router } from "./routes/index";
  * @class App
  */
 export class App {
+
+	/**
+   * Bootstrap the application.
+   *
+   * @static
+   * @return {ng.auto.IInjectorService} Returns the newly created injector for this app.
+   */
+    public static bootstrap(): App {
+        return new App();
+    }
 
     public app: express.Application;
 
@@ -52,7 +63,7 @@ export class App {
      *
      */
     private setRoutes(): void {
-        this.app.use('/', router);
+        this.app.use('/', new IndexRouter().create());
     }
 
     /**
@@ -77,8 +88,4 @@ export class App {
         const mongooseConn = new MongooseConn();
         mongooseConn.initConn();
     }
-
-    public listen(port: String) {
-        this.app.set('port', port);
-      }
 }
