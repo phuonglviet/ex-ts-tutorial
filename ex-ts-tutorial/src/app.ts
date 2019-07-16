@@ -61,8 +61,8 @@ export class App {
      *
      */
     private setRoutes(): void {
-        this.app.use('/', new IndexRouter().create());
-        this.app.use('/catalog', new CatalogRouter().create());
+        this.app.use('/', new IndexRouter().router);
+        this.app.use('/catalog', new CatalogRouter().router);
     }
 
     /**
