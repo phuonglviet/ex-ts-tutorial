@@ -2,4 +2,12 @@ extends layout
 
 block content
   h1= title
-  p Welcome to of catalog: #{title} 
+  
+  ul
+  each author in authorList
+    li 
+      a(href=author.url) #{author.name} 
+      | (#{author.lifespan})
+
+  else
+    li There are no authors.

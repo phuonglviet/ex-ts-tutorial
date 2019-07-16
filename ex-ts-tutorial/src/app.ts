@@ -38,6 +38,7 @@ export class App {
         this.setConfig();
         this.setRoutes();
         this.setErrorHandler();
+        this.connectToTheDatabase();
     }
 
     /**
@@ -83,6 +84,10 @@ export class App {
         });
     }
 
+    /**
+     * Connect DB
+     *
+     */
     private connectToTheDatabase() {
         const mongooseConn = new MongooseConn();
         mongooseConn.initConn();

@@ -3,7 +3,7 @@ import { NextFunction, Request, Response, Router } from "express";
 export abstract class BaseRouter {
 
     public router = Router();
-    public path = '/';
+    public rootPath = '/';
 
     /**
      * Constructor
@@ -11,7 +11,7 @@ export abstract class BaseRouter {
      * @constructor
      */
     constructor() {
-        //this.intializeRoutes();
+        this.intializeRoutes();
     }
 
     /**
