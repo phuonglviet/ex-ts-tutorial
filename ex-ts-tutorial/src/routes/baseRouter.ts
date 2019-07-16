@@ -2,7 +2,7 @@ import { NextFunction, Request, Response, Router } from "express";
 
 export abstract class BaseRouter {
 
-    // public router = Router();
+    public router = Router();
     public path = '/';
 
     /**

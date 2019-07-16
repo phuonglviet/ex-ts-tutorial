@@ -4,8 +4,8 @@ import * as express from 'express';
 
 export class IndexRouter extends BaseRouter {
 
-  // public router = Router();
-  public router = express.Router();
+  public router = Router();
+  //public router = express.Router();
 
   /**
  * Constructor

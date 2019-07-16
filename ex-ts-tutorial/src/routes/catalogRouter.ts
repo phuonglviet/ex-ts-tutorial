@@ -6,7 +6,7 @@ import { AuthorController} from "../controllers/authorController"
 export class CatalogRouter extends BaseRouter {
 
    // public router = Router();
-   public router = express.Router();
+   //public router = express.Router();
   // public path = '/';
 
     /**
