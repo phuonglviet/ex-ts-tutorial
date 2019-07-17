@@ -8,6 +8,7 @@ import { MongooseConn } from "./mongooseConn";
 
 import { IndexRouter } from "./routes/indexRouter";
 import { CatalogRouter } from "./routes/catalogRouter";
+import * as dotenv from 'dotenv';
 
 /**
  * Application.
@@ -34,6 +35,7 @@ export class App {
    * @constructor
    */
     constructor() {
+        dotenv.config();
         this.app = express();
         this.setConfig();
         this.setRoutes();
