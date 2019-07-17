@@ -18,11 +18,5 @@ export abstract class BaseRouter {
    * Create routes.
    *
    */
-    // public abstract create(): Router;
-
-    /**
-   * Create routes.
-   *
-   */
     public abstract intializeRoutes(): void;
 }
