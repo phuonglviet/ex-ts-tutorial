@@ -5,11 +5,15 @@
  */
 
 // var app = require('../app');
+var dotenv = require('dotenv');
 var application = require('../dist/app');
 var debug = require('debug')('ex-ts-tutorial:server');
 var http = require('http');
 var app = application.App.bootstrap().app;
 // var app = new application.App().app;
+
+// initialize configuration
+dotenv.config();
 
 /**
  * Get port from environment and store in Express.

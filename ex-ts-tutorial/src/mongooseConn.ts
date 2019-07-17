@@ -15,7 +15,8 @@ export class MongooseConn {
     public initConn(): void {
         //Set up default mongoose connection
         //var mongoDB = 'mongodb://127.0.0.1/my_database';
-        var mongoDB = 'mongodb+srv://phuong-dev:phuong-dev-123@cluster0-yeagy.mongodb.net/test?retryWrites=true';
+        // var mongoDB = 'mongodb+srv://phuong-dev:phuong-dev-123@cluster0-yeagy.mongodb.net/test?retryWrites=true';
+        var mongoDB = process.env.MONGODB_CONNECTION;
         mongoose.connect(mongoDB, { useNewUrlParser: true });
 
         //Get the default connection
