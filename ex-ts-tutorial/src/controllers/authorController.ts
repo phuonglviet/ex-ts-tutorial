@@ -37,14 +37,10 @@ export class AuthorController {
                 Author.findById(req.params.id)
                     .exec(callback)
             },
-            //  authors_books: function (callback) {
-            //     Book.find({ 'author': req.params.id }, 'title summary')
-            //         .exec(callback)
-            // },
-            // authors_books: function (callback) {
-            //     Book.find({ 'author': req.params.id }, 'title summary')
-            //         .exec(callback)
-            // },
+             authors_books: function (callback) {
+                Book.find({ 'author': req.params.id }, 'title summary')
+                    .exec(callback)
+            },
         }, function (err, results) {
             if (err) { return next(err); } // Error in API usage.
             if (results.author == null) { // No results.

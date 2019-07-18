@@ -15,4 +15,4 @@ GenreSchema
         return '/catalog/genre/' + this._id;
     });
 
-export const Genre: Model<IGenre> = model<IGenre>('Author', GenreSchema);
+export const Genre: Model<IGenre> = model<IGenre>('Genre', GenreSchema);
