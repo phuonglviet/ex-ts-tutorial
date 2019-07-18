@@ -1,6 +1,6 @@
 import { Request, Response, Router, NextFunction } from "express";
 import { BaseRouter } from "./baseRouter"
-import { AuthorController} from "../controllers/authorController"
+import { AuthorController } from "../controllers/authorController"
 
 export class CatalogRouter extends BaseRouter {
 
@@ -22,5 +22,7 @@ export class CatalogRouter extends BaseRouter {
     const authorController = new AuthorController();
     // GET catalog home page.
     this.router.get(this.rootPath, authorController.getAuthorList);
+    // GET request for one Author.
+    this.router.get('/author/:id', authorController.getAuthorDetail);
   }
 }
