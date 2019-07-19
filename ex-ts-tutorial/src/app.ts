@@ -9,6 +9,7 @@ import { MongooseConn } from "./mongooseConn";
 import { IndexRouter } from "./routes/indexRouter";
 import { CatalogRouter } from "./routes/catalogRouter";
 import * as dotenv from 'dotenv';
+import errorMiddleware from './middleware/error.middleware';
 
 /**
  * Application.
@@ -41,6 +42,7 @@ export class App {
         this.setRoutes();
         this.setErrorHandler();
         this.connectToTheDatabase();
+        // this.initializeErrorHandling();
     }
 
     /**
@@ -84,6 +86,14 @@ export class App {
             res.status(err.status || 500);
             res.render('error');
         });
+    }
+
+    /**
+     * Create Error handler
+     *
+     */
+    private initializeErrorHandling() {
+        this.app.use(errorMiddleware);
     }
 
     /**

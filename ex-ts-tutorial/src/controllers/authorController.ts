@@ -1,5 +1,6 @@
 import { Request, Response, Router, NextFunction } from "express";
 import * as async from "async";
+import NotFoundException from "../exceptions/notFoundException"
 import { Author } from "../models/author";
 import { Book, IBook } from '../models/book';
 import { Genre } from '../models/genre';
@@ -44,10 +45,9 @@ export class AuthorController {
         }, function (err, results) {
             if (err) { return next(err); } // Error in API usage.
             if (results.author == null) { // No results.
-                // var err = new Error('Author not found');
-                // err.status = 404;
-                // return next(err);
-                return next('Author not found');
+                const id = req.params.id;
+                var error = new NotFoundException('Author not found with id :' + id);
+                return next(error);
             }
             // Successful, so render.
             res.render('author_detail', { title: 'Author Detail', author: results.author, author_books: results.authors_books });
