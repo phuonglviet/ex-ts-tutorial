@@ -6,6 +6,7 @@ export interface IAuthor extends Document {
   family_name: String;
   date_of_birth: Date;
   date_of_death: Date;
+  url: String;
 }
 
 var AuthorSchema = new Schema(
