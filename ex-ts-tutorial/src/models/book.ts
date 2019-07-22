@@ -3,10 +3,10 @@ import { IAuthor } from './author';
 import { IGenre } from './genre';
 
 export interface IBook extends Document {
-    title: String;
+    title: string;
     author: IAuthor['_id'];
-    summary: String;
-    isbn: String;
+    summary: string;
+    isbn: string;
     genre: IGenre['_id'];
 }
 

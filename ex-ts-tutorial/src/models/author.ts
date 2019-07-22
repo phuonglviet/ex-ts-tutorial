@@ -2,11 +2,11 @@ import { Schema, Document, Model, model } from 'mongoose';
 import * as moment from 'moment'
 
 export interface IAuthor extends Document {
-  first_name: String;
-  family_name: String;
+  first_name: string;
+  family_name: string;
   date_of_birth: Date;
   date_of_death: Date;
-  url: String;
+  url: string;
 }
 
 var AuthorSchema = new Schema(

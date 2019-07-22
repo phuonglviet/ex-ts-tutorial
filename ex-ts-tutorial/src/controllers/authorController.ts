@@ -4,10 +4,14 @@ import NotFoundException from "../exceptions/notFoundException"
 import { Author } from "../models/author";
 import { Book, IBook } from '../models/book';
 import { Genre } from '../models/genre';
-const { body, validationResult, sanitizeBody } = require('express-validator');
-// const sanitizeBody = require('express-validator/filter');
+// const { check, body, validationResult } = require('express-validator');
+const { check, body, validationResult } = require('express-validator');
+// import { check } from "express-validator";
+// import { check, body, validationResult } from "express-validator/check";
+// import * as sanitizeBody from "express-validator";
+// const sanitizeBody = require('express-validator');
 // const { body, validationResult } = require('express-validator/check');
-// const sanitizeBody = require('express-validator/filter');
+// const sanitizeBody = require('express-validator');
 // import { check, body, validationResult } from "express-validator/check";
 // import { check, body, validationResult } from "express-validator/check";
 // import sanitizeBody = require('express-validator/filter');
@@ -72,53 +76,56 @@ export class AuthorController {
     /*
     * Handle Author create on POST.
     */
-    public authorCreatePost(req: Request, res: Response, next: NextFunction): any {
+    public authorCreatePost(req: Request, res: Response, next: NextFunction): void {
         // Validate fields.
-        body('first_name').isLength({ min: 1 }).trim().withMessage('First name must be specified.')
-            .isAlphanumeric().withMessage('First name has non-alphanumeric characters.'),
-            body('family_name').isLength({ min: 1 }).trim().withMessage('Family name must be specified.')
-                .isAlphanumeric().withMessage('Family name has non-alphanumeric characters.'),
-            body('date_of_birth', 'Invalid date of birth').optional({ checkFalsy: true }).isISO8601(),
-            body('date_of_death', 'Invalid date of death').optional({ checkFalsy: true }).isISO8601(),
+        check('first_name').isEmail();
+        check('first_name', 'nhap mail').isEmail();
+        check('first_name', 'con cat').isLength({ min: 10 });
 
-            // Sanitize fields.
-            sanitizeBody('first_name').escape(),
-            sanitizeBody('family_name').escape(),
-            sanitizeBody('date_of_birth').toDate(),
-            sanitizeBody('date_of_death').toDate(),
+        check('first_name').isLength({ min: 10 }).trim().escape().withMessage('First name must be specified.')
+            .isAlphanumeric().withMessage('First name has non-alphanumeric characters.');
+        body('first_name').isLength({ min: 10 }).trim().escape().withMessage('First name must be specified.')
+             .isAlphanumeric().withMessage('First name has non-alphanumeric characters.');
+        body('family_name').isLength({ min: 10 }).trim().withMessage('Family name must be specified.')
+            .isAlphanumeric().withMessage('Family name has non-alphanumeric characters.');
+        body('date_of_birth', 'Invalid date of birth').optional({ checkFalsy: true }).isISO8601();
+        body('date_of_death', 'Invalid date of death').optional({ checkFalsy: true }).isISO8601();
 
-            // Process request after validation and sanitization.
-            (req, res, next) => {
+        // Sanitize fields.
+        // sanitizeBody('first_name').escape();
+        // sanitizeBody('family_name').escape();
+        // sanitizeBody('date_of_birth').toDate();
+        // sanitizeBody('date_of_death').toDate();
 
-                // Extract the validation errors from a request.
-                const errors = validationResult(req);
+        // Process request after validation and sanitization.
+        // Extract the validation errors from a request.
+        const errors = validationResult(req);
 
-                // Create Author object with escaped and trimmed data
-                var author = new Author(
-                    {
-                        first_name: req.body.first_name,
-                        family_name: req.body.family_name,
-                        date_of_birth: req.body.date_of_birth,
-                        date_of_death: req.body.date_of_death,
-                    }
-                );
-
-                if (!errors.isEmpty()) {
-                    // There are errors. Render form again with sanitized values/errors messages.
-                    res.render('author_form', { title: 'Create Author', author: author, errors: errors.array() });
-                    return;
-                }
-                else {
-                    // Data from form is valid.
-
-                    // Save author.
-                    author.save(function (err) {
-                        if (err) { return next(err); }
-                        // Successful - redirect to new author record.
-                        res.redirect(author.url);
-                    });
-                }
+        // Create Author object with escaped and trimmed data
+        var author = new Author(
+            {
+                first_name: req.body.first_name,
+                family_name: req.body.family_name,
+                date_of_birth: req.body.date_of_birth,
+                date_of_death: req.body.date_of_death,
             }
+        );
+
+        if (!errors.isEmpty()) {
+            // There are errors. Render form again with sanitized values/errors messages.
+            res.render('author_form', { title: 'Create Author', author: author, errors: errors.array() });
+            return;
+        }
+        else {
+            // Data from form is valid.
+
+            // Save author.
+            author.save(function (err) {
+                if (err) { return next(err); }
+                // Successful - redirect to new author record.
+                res.redirect(author.url);
+            });
+        }
     }
 
 }

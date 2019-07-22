@@ -1,7 +1,7 @@
 import { Schema, Document, Model, model } from 'mongoose';
 
 export interface IGenre extends Document {
-    name: String;
+    name: string;
 }
 
 var GenreSchema = new Schema({
