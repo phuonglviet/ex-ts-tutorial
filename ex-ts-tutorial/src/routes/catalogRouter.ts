@@ -27,7 +27,7 @@ export class CatalogRouter extends BaseRouter {
     this.router.get('/author/create', authorController.authorCreateGet);
 
     // POST request for creating Author.
-    this.router.post('/author/create', authorController.authorCreatePost);
+    this.router.post('/author/create', authorController.authorCreateCheck, authorController.authorCreatePost);
 
     // GET request for one Author.
     this.router.get('/author/:id', authorController.getAuthorDetail);

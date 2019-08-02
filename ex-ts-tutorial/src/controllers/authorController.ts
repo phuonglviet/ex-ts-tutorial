@@ -4,17 +4,9 @@ import NotFoundException from "../exceptions/notFoundException"
 import { Author } from "../models/author";
 import { Book, IBook } from '../models/book';
 import { Genre } from '../models/genre';
-// const { check, body, validationResult } = require('express-validator');
+import { DateUtil } from "../util/dateUtil";
 const { check, body, validationResult } = require('express-validator');
-// import { check } from "express-validator";
-// import { check, body, validationResult } from "express-validator/check";
-// import * as sanitizeBody from "express-validator";
-// const sanitizeBody = require('express-validator');
-// const { body, validationResult } = require('express-validator/check');
-// const sanitizeBody = require('express-validator');
-// import { check, body, validationResult } from "express-validator/check";
-// import { check, body, validationResult } from "express-validator/check";
-// import sanitizeBody = require('express-validator/filter');
+
 
 export class AuthorController {
 
@@ -74,28 +66,23 @@ export class AuthorController {
     }
 
     /*
+    * Handle Author create on POST Validate.
+    */
+   public authorCreateCheck = [
+        // Validate fields.
+        check('first_name').isLength({ min: 10 }).trim().escape().withMessage('First name must be specified.')
+            .isAlphanumeric().withMessage('First name has non-alphanumeric characters.'),
+        check('family_name').isLength({ min: 10 }).trim().escape().withMessage('Family name must be specified.')
+            .isAlphanumeric().withMessage('Family name has non-alphanumeric characters.'),
+        check('date_of_birth', 'date of birth is required').not().isEmpty(),
+        check('date_of_birth', 'Invalid date of birth').optional({ checkFalsy: true }).isISO8601().toDate(),
+        check('date_of_death', 'Invalid date of death').optional({ checkFalsy: true }).isISO8601().toDate()
+    ];
+
+   /*
     * Handle Author create on POST.
     */
-    public authorCreatePost(req: Request, res: Response, next: NextFunction): void {
-        // Validate fields.
-        check('first_name').isEmail();
-        check('first_name', 'nhap mail').isEmail();
-        check('first_name', 'con cat').isLength({ min: 10 });
-
-        check('first_name').isLength({ min: 10 }).trim().escape().withMessage('First name must be specified.')
-            .isAlphanumeric().withMessage('First name has non-alphanumeric characters.');
-        body('first_name').isLength({ min: 10 }).trim().escape().withMessage('First name must be specified.')
-             .isAlphanumeric().withMessage('First name has non-alphanumeric characters.');
-        body('family_name').isLength({ min: 10 }).trim().withMessage('Family name must be specified.')
-            .isAlphanumeric().withMessage('Family name has non-alphanumeric characters.');
-        body('date_of_birth', 'Invalid date of birth').optional({ checkFalsy: true }).isISO8601();
-        body('date_of_death', 'Invalid date of death').optional({ checkFalsy: true }).isISO8601();
-
-        // Sanitize fields.
-        // sanitizeBody('first_name').escape();
-        // sanitizeBody('family_name').escape();
-        // sanitizeBody('date_of_birth').toDate();
-        // sanitizeBody('date_of_death').toDate();
+   public authorCreatePost(req: Request, res: Response, next: NextFunction): void {
 
         // Process request after validation and sanitization.
         // Extract the validation errors from a request.
@@ -126,6 +113,6 @@ export class AuthorController {
                 res.redirect(author.url);
             });
         }
-    }
+   }
 
 }
