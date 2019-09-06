@@ -31,5 +31,12 @@ export class CatalogRouter extends BaseRouter {
 
     // GET request for one Author.
     this.router.get('/author/:id', authorController.getAuthorDetail);
+
+    // GET request to delete Author.
+    this.router.get('/author/:id/delete', authorController.authorDeleteGet);
+
+    // POST request to delete Author
+    this.router.post('/author/:id/delete', authorController.authorDeletePost);
+
   }
 }
