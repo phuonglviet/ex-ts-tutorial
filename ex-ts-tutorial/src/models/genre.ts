@@ -2,6 +2,7 @@ import { Schema, Document, Model, model } from 'mongoose';
 
 export interface IGenre extends Document {
     name: string;
+    url: string;
 }
 
 var GenreSchema = new Schema({
