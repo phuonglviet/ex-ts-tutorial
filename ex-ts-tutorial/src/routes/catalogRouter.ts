@@ -2,6 +2,8 @@ import { Request, Response, Router, NextFunction } from "express";
 import { BaseRouter } from "./baseRouter"
 import { AuthorController } from "../controllers/authorController"
 import { GenreController } from "../controllers/genreController"
+import { BookinstanceController } from "../controllers/bookinstanceController"
+import { BookController } from "../controllers/bookController"
 
 
 export class CatalogRouter extends BaseRouter {
@@ -22,8 +24,13 @@ export class CatalogRouter extends BaseRouter {
    */
   public intializeRoutes() {
 
-    /// AUTHOR ROUTES ///
+    // Require our controllers.
     const authorController = new AuthorController();
+    const genreController = new GenreController();
+    const bookinstanceController = new BookinstanceController();
+    const bookController = new BookController();
+
+    /// AUTHOR ROUTES ///
     // GET catalog home page.
     this.router.get(this.rootPath, authorController.getAuthorList);
 
@@ -50,7 +57,6 @@ export class CatalogRouter extends BaseRouter {
 
 
     /// GENRE ROUTES ///
-    const genreController = new GenreController();
     // GET request for creating a Genre. NOTE This must come before route that displays Genre (uses id).
     this.router.get('/genre/create', genreController.genreCreateGet);
 
@@ -74,6 +80,60 @@ export class CatalogRouter extends BaseRouter {
 
     // GET request for list of all Genre.
     this.router.get('/genres', genreController.getGenreList);
+
+    /// BOOKINSTANCE ROUTES ///
+    // GET request for creating a BookInstance. NOTE This must come before route that displays BookInstance (uses id).
+    this.router.get('/bookinstance/create', bookinstanceController.bookinstanceCreateGet);
+
+    // POST request for creating BookInstance.
+    this.router.post('/bookinstance/create', bookinstanceController.bookinstanceCreateCheck, bookinstanceController.bookinstanceCreatePost);
+
+    // GET request to delete BookInstance.
+    this.router.get('/bookinstance/:id/delete', bookinstanceController.bookinstanceDeleteGet);
+
+    // POST request to delete BookInstance.
+    this.router.post('/bookinstance/:id/delete', bookinstanceController.bookinstanceDeletePost);
+
+    // GET request to update BookInstance.
+    this.router.get('/bookinstance/:id/update', bookinstanceController.bookinstanceUpdateGet);
+
+    // POST request to update BookInstance.
+    this.router.post('/bookinstance/:id/update', bookinstanceController.bookinstanceCreateCheck, bookinstanceController.bookinstanceUpdatePost);
+
+    // GET request for one BookInstance.
+    this.router.get('/bookinstance/:id', bookinstanceController.bookinstanceDetail);
+
+    // GET request for list of all BookInstance.
+    this.router.get('/bookinstances', bookinstanceController.bookinstanceList);
+
+
+    /// BOOK ROUTES ///
+    // GET catalog home page.
+    this.router.get('/', bookController.index);
+
+    // GET request for creating a Book. NOTE This must come before routes that display Book (uses id).
+    // this.router.get('/book/create', bookController.book_create_get);
+
+    // POST request for creating Book.
+    // this.router.post('/book/create', bookController.book_create_post);
+
+    // GET request to delete Book.
+    // this.router.get('/book/:id/delete', bookController.book_delete_get);
+
+    // POST request to delete Book.
+    // this.router.post('/book/:id/delete', bookController.book_delete_post);
+
+    // GET request to update Book.
+    // this.router.get('/book/:id/update', bookController.book_update_get);
+
+    // POST request to update Book.
+    // this.router.post('/book/:id/update', bookController.book_update_post);
+
+    // GET request for one Book.
+    // this.router.get('/book/:id', bookController.book_detail);
+
+    // GET request for list of all Book.
+    // this.router.get('/books', bookController.book_list);
 
   }
 }

@@ -1,11 +1,6 @@
 import { Request, Response, Router, NextFunction } from "express";
-import * as async from "async";
-import NotFoundException from "../exceptions/notFoundException"
-import { Author } from "../models/author";
 import { Book, IBook } from '../models/book';
 import { Genre } from '../models/genre';
-import { DateUtil } from "../util/dateUtil";
-import { domainToASCII } from "url";
 const { check, body, validationResult } = require('express-validator');
 
 export class GenreController {
@@ -37,19 +32,20 @@ export class GenreController {
     */
     public getGenreDetail(req: Request, res: Response, next: NextFunction): void {
 
-        Genre.findById(req.params.id).exec()
-            .then(function (genre) {
+        let genreQuery = Genre.findById(req.params.id).exec();
+        let bookQuery = Book.find({ 'genre': req.params.id }).exec();
+        Promise.all([
+            genreQuery,
+            bookQuery
+        ])
+            .then(([genre, books]) => {
                 if (genre == null) { // No results.
                     var err = new Error('Genre not found');
                     // err.status = 404;
                     return next(err);
                 }
-
-                Book.find({ 'genre': req.params.id }).exec()
-                    .then(function (books) {
-                        // Successful, so render.
-                        res.render('genre_detail', { title: 'Genre Detail', genre: genre, genre_books: books });
-                    });
+                // Successful, so render.
+                res.render('genre_detail', { title: 'Genre Detail', genre: genre, genre_books: books });
             })
             .catch(err => {
                 //handle possible errors
@@ -112,6 +108,25 @@ export class GenreController {
                         });
                     }
                 });
+            let genreQuery = Genre.findById(req.params.id).exec();
+            let bookQuery = Book.find({ 'genre': req.params.id }).exec();
+            Promise.all([
+                genreQuery,
+                bookQuery
+            ])
+                .then(([genre, books]) => {
+                    if (genre == null) { // No results.
+                        var err = new Error('Genre not found');
+                        // err.status = 404;
+                        return next(err);
+                    }
+                    // Successful, so render.
+                    res.render('genre_detail', { title: 'Genre Detail', genre: genre, genre_books: books });
+                })
+                .catch(err => {
+                    //handle possible errors
+                    return next(err);
+                });
         }
     }
 
@@ -119,18 +134,19 @@ export class GenreController {
      * Display Genre delete form on GET.
      */
     public genreDeleteGet(req: Request, res: Response, next: NextFunction): void {
-
-        Genre.findById(req.params.id).exec()
-            .then(function (genre) {
+        
+        let genreQuery = Genre.findById(req.params.id).exec();
+        let bookQuery = Book.find({ 'genre': req.params.id }).exec();
+        Promise.all([
+            genreQuery,
+            bookQuery
+        ])
+            .then(([genre, books]) => {
                 if (genre == null) { // No results.
                     res.redirect('/catalog/genres');
                 }
-
-                Book.find({ 'genre': req.params.id }).exec()
-                    .then(function (books) {
-                        // Successful, so render.
-                        res.render('genre_delete', { title: 'Delete Genre', genre: genre, genre_books: books });
-                    });
+                // Successful, so render.
+                res.render('genre_delete', { title: 'Delete Genre', genre: genre, genre_books: books });
             })
             .catch(err => {
                 //handle possible errors
