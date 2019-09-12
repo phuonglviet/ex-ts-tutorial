@@ -60,13 +60,14 @@ export class CatalogRouter extends BaseRouter {
 
     /// AUTHOR ROUTES ///
     // GET catalog home page.
-    this.router.get(this.rootPath, authorController.getAuthorList);
+    this.router.get('/authors', authorController.getAuthorList);
 
     // GET request for creating Author. NOTE This must come before route for id (i.e. display author).
     this.router.get('/author/create', authorController.authorCreateGet);
-
-    // POST request for creating Author.
-    this.router.post('/author/create', authorController.authorCreateCheck, authorController.authorCreatePost);
+    
+    // POST request for creating Author.(validate check with Way 1 and Way 2)
+    // this.router.post('/author/create', authorController.authorCreateCheck, authorController.authorCreatePost);
+    this.router.post('/author/create', authorController.authorCreatePost_way_2);
 
     // GET request for one Author.
     this.router.get('/author/:id', authorController.getAuthorDetail);

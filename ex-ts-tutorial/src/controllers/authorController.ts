@@ -6,6 +6,8 @@ import { Book, IBook } from '../models/book';
 import { Genre } from '../models/genre';
 import { DateUtil } from "../util/dateUtil";
 import { domainToASCII } from "url";
+import { AuthorEntity } from "../entity/authorEntity";
+import { validate, validateOrReject } from "class-validator";
 const { check, body, validationResult } = require('express-validator');
 
 export class AuthorController {
@@ -81,6 +83,7 @@ export class AuthorController {
 
     /*
      * Handle Author create on POST.
+     * Way 1: with express validate check
      */
     public authorCreatePost(req: Request, res: Response, next: NextFunction): void {
 
@@ -113,6 +116,59 @@ export class AuthorController {
                 res.redirect(author.url);
             });
         }
+    }
+
+    /*
+     * Handle Author create on POST.
+     * Way 2: with class_validator check
+     */
+    public authorCreatePost_way_2(req: Request, res: Response, next: NextFunction): void {
+
+        // Create Author object with escaped and trimmed data
+        var authorEntity = new AuthorEntity(req.body.first_name,
+            req.body.family_name,
+            req.body.date_of_birth,
+            req.body.date_of_death);
+
+        // Create Author object with escaped and trimmed data
+        var author = new Author(
+            {
+                first_name: req.body.first_name,
+                family_name: req.body.family_name,
+                date_of_birth: req.body.date_of_birth,
+                date_of_death: req.body.date_of_death,
+            }
+        );
+
+        console.log("Promise rejected (validation failed). Errorsaaaaaaaaaaaa: ");
+        validateOrReject(authorEntity).catch(errors => {
+            console.log("Promise rejected (validation failed). Errors: ", errors);
+            // There are errors. Render form again with sanitized values/errors messages.
+            res.render('author_form', { title: 'Create Author', author: author, errors: errors });
+            next();
+            return;
+        });
+
+        next();
+
+        // validate(authorEntity).then(errors => { // errors is an array of validation errors
+        //     if (errors.length > 0) {
+        //         // There are errors. Render form again with sanitized values/errors messages.
+        //         res.render('author_form', { title: 'Create Author', author: author, errors: errors });
+        //     }
+        //     else {
+        //     }
+        // });
+
+        // Save author.
+        // author.save(function (err) {
+        //     if (err) { return next(err); }
+        //     // Successful - redirect to new author record.
+        //     res.redirect(author.url);
+        // });
+
+       // res.redirect(author.url);
+        console.log('aaaaaaaaaaaaaaa');
     }
 
     /*
