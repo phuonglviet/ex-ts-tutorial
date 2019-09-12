@@ -30,6 +30,34 @@ export class CatalogRouter extends BaseRouter {
     const bookinstanceController = new BookinstanceController();
     const bookController = new BookController();
 
+    /// BOOK ROUTES ///
+    // GET catalog home page.
+    this.router.get('/', bookController.index);
+
+    // GET request for creating a Book. NOTE This must come before routes that display Book (uses id).
+    this.router.get('/book/create', bookController.bookCreateGet);
+
+    // POST request for creating Book.
+    this.router.post('/book/create', bookController.bookCreateConvert, bookController.bookCreateCheck, bookController.bookCreatePost);
+
+    // GET request to delete Book.
+    this.router.get('/book/:id/delete', bookController.bookDeleteGet);
+
+    // POST request to delete Book.
+    this.router.post('/book/:id/delete', bookController.bookDeletePost);
+
+    // GET request to update Book.
+    this.router.get('/book/:id/update', bookController.bookUpdateGet);
+
+    // POST request to update Book.
+    this.router.post('/book/:id/update', bookController.bookUpdatePost);
+
+    // GET request for one Book.
+    this.router.get('/book/:id', bookController.bookDetail);
+
+    // GET request for list of all Book.
+    this.router.get('/books', bookController.bookList);
+
     /// AUTHOR ROUTES ///
     // GET catalog home page.
     this.router.get(this.rootPath, authorController.getAuthorList);
@@ -105,35 +133,5 @@ export class CatalogRouter extends BaseRouter {
 
     // GET request for list of all BookInstance.
     this.router.get('/bookinstances', bookinstanceController.bookinstanceList);
-
-
-    /// BOOK ROUTES ///
-    // GET catalog home page.
-    this.router.get('/', bookController.index);
-
-    // GET request for creating a Book. NOTE This must come before routes that display Book (uses id).
-    // this.router.get('/book/create', bookController.book_create_get);
-
-    // POST request for creating Book.
-    // this.router.post('/book/create', bookController.book_create_post);
-
-    // GET request to delete Book.
-    // this.router.get('/book/:id/delete', bookController.book_delete_get);
-
-    // POST request to delete Book.
-    // this.router.post('/book/:id/delete', bookController.book_delete_post);
-
-    // GET request to update Book.
-    // this.router.get('/book/:id/update', bookController.book_update_get);
-
-    // POST request to update Book.
-    // this.router.post('/book/:id/update', bookController.book_update_post);
-
-    // GET request for one Book.
-    // this.router.get('/book/:id', bookController.book_detail);
-
-    // GET request for list of all Book.
-    // this.router.get('/books', bookController.book_list);
-
   }
 }

@@ -1,13 +1,15 @@
-import { Schema, Document, Model, model } from 'mongoose';
+import { Schema, Document, Model, model, Types } from 'mongoose';
 import { IAuthor } from './author';
-import { IGenre } from './genre';
+import { IGenre, Genre } from './genre';
 
 export interface IBook extends Document {
     title: string;
     author: IAuthor['_id'];
     summary: string;
     isbn: string;
-    genre: IGenre['_id'];
+    genre: [IGenre['_id']];
+    //genre: Types.Array<IGenre['_id']>;
+    url: string;
 }
 
 var BookSchema = new Schema(
