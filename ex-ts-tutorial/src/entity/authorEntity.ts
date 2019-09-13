@@ -1,10 +1,10 @@
-import { validate, validateOrReject, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max, IsAlphanumeric } from "class-validator";
+import { validate, validateOrReject, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max, IsAlphanumeric, MinLength, IsDateString, IsISO8601 } from "class-validator";
 import * as validator from 'class-validator'
 import { CustomIsNotAlphanumeric } from "../extension/classValidator/customIsNotAlphanumeric";
 
 export class AuthorEntity {
 
-    @Min(10, {
+    @MinLength(1, {
         message: "First name must be specified."
     })
     @validator.Validate(CustomIsNotAlphanumeric, {
@@ -12,20 +12,20 @@ export class AuthorEntity {
     })
     first_name: string;
 
-    @Min(10, {
+    @MinLength(1, {
         message: "Family name must be specified."
     })
-    // @validator.Validate(CustomIsNotAlphanumeric, {
-    //     message: "Family name has non-alphanumeric characters."
-    // })
+    @validator.Validate(CustomIsNotAlphanumeric, {
+        message: "Family name has non-alphanumeric characters."
+    })
     family_name: string;
 
-    @IsDate({
+    @IsISO8601({
         message: "Invalid date of birth."
     })
     date_of_birth: Date;
 
-    @IsDate({
+    @IsISO8601({
         message: "Invalid date of death."
     })
     date_of_death: Date;

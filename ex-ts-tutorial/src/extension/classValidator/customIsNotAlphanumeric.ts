@@ -4,8 +4,8 @@ import { ValidatorConstraint, ValidatorConstraintInterface, ValidationArguments,
 export class CustomIsNotAlphanumeric implements ValidatorConstraintInterface {
 
     validate(text: string, validationArguments: ValidationArguments) {
-        var validator = new Validator();
-        return !validator.isAlphanumeric(text);
+        var regex = new RegExp('^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$');
+        return regex.test(text);
     }
 }
 

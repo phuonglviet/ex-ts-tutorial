@@ -72,9 +72,9 @@ export class AuthorController {
     */
     public authorCreateCheck = [
         // Validate fields.
-        check('first_name').trim().escape().isLength({ min: 10 }).withMessage('First name must be specified.')
+        check('first_name').trim().escape().isLength({ min: 1 }).withMessage('First name must be specified.')
             .isAlphanumeric().withMessage('First name has non-alphanumeric characters.'),
-        check('family_name').trim().escape().isLength({ min: 10 }).withMessage('Family name must be specified.')
+        check('family_name').trim().escape().isLength({ min: 1 }).withMessage('Family name must be specified.')
             .isAlphanumeric().withMessage('Family name has non-alphanumeric characters.'),
         check('date_of_birth', 'date of birth is required').not().isEmpty(),
         check('date_of_birth', 'Invalid date of birth').optional({ checkFalsy: true }).isISO8601().toDate(),
@@ -119,10 +119,10 @@ export class AuthorController {
     }
 
     /*
-     * Handle Author create on POST.
-     * Way 2: with class_validator check
-     */
-    public authorCreatePost_way_2(req: Request, res: Response, next: NextFunction): void {
+    * Handle Author create on POST Validate.
+    * Way 2: with class_validator check
+    */
+    public authorCreateCheck_way_2(req: Request, res: Response, next: NextFunction): void {
 
         // Create Author object with escaped and trimmed data
         var authorEntity = new AuthorEntity(req.body.first_name,
@@ -140,35 +140,51 @@ export class AuthorController {
             }
         );
 
-        console.log("Promise rejected (validation failed). Errorsaaaaaaaaaaaa: ");
-        validateOrReject(authorEntity).catch(errors => {
-            console.log("Promise rejected (validation failed). Errors: ", errors);
-            // There are errors. Render form again with sanitized values/errors messages.
-            res.render('author_form', { title: 'Create Author', author: author, errors: errors });
-            next();
-            return;
+        validate(authorEntity).then(errors => { // errors is an array of validation errors
+            if (errors.length > 0) {
+
+                var errorsMsg: string[] = new Array();
+                errors.forEach(function (error) {
+                    // Object.keys(error.constraints).forEach((key) => { console.log(error.constraints[key]) });
+                    Object.keys(error.constraints).forEach((key) => { errorsMsg.push(error.constraints[key]) });
+                });
+
+                res.render('author_form', { title: 'Create Author', author: author, errors: errorsMsg });
+                return;
+            }
+            else {
+                next();
+            }
         });
 
-        next();
-
-        // validate(authorEntity).then(errors => { // errors is an array of validation errors
-        //     if (errors.length > 0) {
-        //         // There are errors. Render form again with sanitized values/errors messages.
-        //         res.render('author_form', { title: 'Create Author', author: author, errors: errors });
-        //     }
-        //     else {
-        //     }
+        // validateOrReject(authorEntity).catch(errors => {
+        //     // There are errors. Render form again with sanitized values/errors messages.
+        //     res.render('author_form', { title: 'Create Author', author: author, errors: errors });
         // });
+    }
+
+    /*
+     * Handle Author create on POST.
+     * Way 2: with class_validator check
+     */
+    public authorCreatePost_way_2(req: Request, res: Response, next: NextFunction): void {
+
+        // Create Author object with escaped and trimmed data
+        var author = new Author(
+            {
+                first_name: req.body.first_name,
+                family_name: req.body.family_name,
+                date_of_birth: req.body.date_of_birth,
+                date_of_death: req.body.date_of_death,
+            }
+        );
 
         // Save author.
-        // author.save(function (err) {
-        //     if (err) { return next(err); }
-        //     // Successful - redirect to new author record.
-        //     res.redirect(author.url);
-        // });
-
-       // res.redirect(author.url);
-        console.log('aaaaaaaaaaaaaaa');
+        author.save(function (err) {
+            if (err) { return next(err); }
+            // Successful - redirect to new author record.
+            res.redirect(author.url);
+        });
     }
 
     /*
