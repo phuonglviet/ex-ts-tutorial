@@ -3,12 +3,12 @@ import * as express from "express";
 import * as path from "path";
 import * as cookieParser from 'cookie-parser';
 import * as logger from 'morgan';
-
+import * as bodyParser from 'body-parser';
+import * as dotenv from 'dotenv';
 import { MongooseConn } from "./mongooseConn";
 
 import { IndexRouter } from "./routes/indexRouter";
 import { CatalogRouter } from "./routes/catalogRouter";
-import * as dotenv from 'dotenv';
 import errorMiddleware from './middleware/error.middleware';
 
 /**
@@ -58,8 +58,11 @@ export class App {
         this.app.use(express.json());
         this.app.use(express.urlencoded({ extended: false }));
         this.app.use(cookieParser());
-        this.app.use(express.static(path.join( __dirname, '/../public')));
+        this.app.use(express.static(path.join(__dirname, '/../public')));
         // this.app.use(express.static(path.join( __dirname, '../public')));
+        // Parse incoming requests data
+        this.app.use(bodyParser.json());
+        this.app.use(bodyParser.urlencoded({ extended: false }));
     }
 
     /**

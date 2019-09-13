@@ -4,7 +4,7 @@ import { AuthorController } from "../controllers/authorController"
 import { GenreController } from "../controllers/genreController"
 import { BookinstanceController } from "../controllers/bookinstanceController"
 import { BookController } from "../controllers/bookController"
-
+import { ApiAuthorController } from "../api/controllers/apiAuthorController"
 
 export class CatalogRouter extends BaseRouter {
 
@@ -29,6 +29,10 @@ export class CatalogRouter extends BaseRouter {
     const genreController = new GenreController();
     const bookinstanceController = new BookinstanceController();
     const bookController = new BookController();
+
+    // Require our api controllers.
+    const apiAuthorController = new ApiAuthorController();
+
 
     /// BOOK ROUTES ///
     // GET catalog home page.
@@ -134,5 +138,23 @@ export class CatalogRouter extends BaseRouter {
 
     // GET request for list of all BookInstance.
     this.router.get('/bookinstances', bookinstanceController.bookinstanceList);
+
+    /// API FROM HERE ///
+    /// API AUTHOR ROUTES ///
+    // GET catalog home page.
+    this.router.get('/api/authors', apiAuthorController.getAuthorList);
+
+    // POST request for creating Author.(validate check with Way 1 and Way 2)
+    // this.router.post('/api/author/create', apiAuthorController.authorCreateCheck, apiAuthorController.authorCreatePost);
+    this.router.post('/api/author/create', apiAuthorController.authorCreateCheck_way_2, apiAuthorController.authorCreatePost_way_2);
+
+    // GET request for one Author.
+    this.router.get('/api/author/:id', apiAuthorController.getAuthorDetail);
+
+    // GET request to delete Author.
+    this.router.get('/api/author/:id/delete', apiAuthorController.authorDeleteGet);
+
+    // POST request to update Author.
+    this.router.put('/api/author/:id/update', apiAuthorController.authorCreateCheck_way_2, apiAuthorController.authorUpdatePost);
   }
 }
