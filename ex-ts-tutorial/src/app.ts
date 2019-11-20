@@ -11,101 +11,44 @@ import { IndexRouter } from "./routes/indexRouter";
 import { CatalogRouter } from "./routes/catalogRouter";
 import errorMiddleware from './middleware/error.middleware';
 
-/**
- * Application.
- *
- * @class App
- */
-export class App {
+const app = express();
 
-	/**
-   * Bootstrap the application.
-   *
-   * @static
-   * @return {ng.auto.IInjectorService} Returns the newly created injector for this app.
-   */
-    public static bootstrap(): App {
-        return new App();
-    }
+// Configure application
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'pug');
+app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, '/../public')));
+// Parse incoming requests data
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
-    public app: express.Application;
 
-    /**
-   * Constructor.
-   *
-   * @constructor
-   */
-    constructor() {
-        dotenv.config();
-        this.app = express();
-        this.setConfig();
-        this.setRoutes();
-        this.setErrorHandler();
-        this.connectToTheDatabase();
-        // this.initializeErrorHandling();
-    }
+// Router
+app.use('/', new IndexRouter().router);
+app.use('/catalog', new CatalogRouter().router);
 
-    /**
-     * Configure application
-     *
-     */
-    private setConfig(): void {
-        // view engine setup
-        this.app.set('views', path.join(__dirname, 'views'));
-        this.app.set('view engine', 'pug');
+// Error handler
+app.use(function (err, req, res, next) {
+    // set locals, only providing error in development
+    res.locals.message = err.message;
+    res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-        this.app.use(logger('dev'));
-        this.app.use(express.json());
-        this.app.use(express.urlencoded({ extended: false }));
-        this.app.use(cookieParser());
-        this.app.use(express.static(path.join(__dirname, '/../public')));
-        // this.app.use(express.static(path.join( __dirname, '../public')));
-        // Parse incoming requests data
-        this.app.use(bodyParser.json());
-        this.app.use(bodyParser.urlencoded({ extended: false }));
-    }
+    // render the error page
+    res.status(err.status || 500);
+    res.render('error');
+});
 
-    /**
-     * Create and return Router.
-     *
-     */
-    private setRoutes(): void {
-        this.app.use('/', new IndexRouter().router);
-        this.app.use('/catalog', new CatalogRouter().router);
-    }
+// Error handler
+app.use(errorMiddleware);
 
-    /**
-     * Create Error handler
-     *
-     */
-    private setErrorHandler(): void {
+dotenv.config({ path: path.resolve(__dirname, '../.env') })
 
-        // error handler
-        this.app.use(function (err, req, res, next) {
-            // set locals, only providing error in development
-            res.locals.message = err.message;
-            res.locals.error = req.app.get('env') === 'development' ? err : {};
+// Connect DB
+const mongooseConn = new MongooseConn();
+mongooseConn.initConn();
 
-            // render the error page
-            res.status(err.status || 500);
-            res.render('error');
-        });
-    }
-
-    /**
-     * Create Error handler
-     *
-     */
-    private initializeErrorHandling() {
-        this.app.use(errorMiddleware);
-    }
-
-    /**
-     * Connect DB
-     *
-     */
-    private connectToTheDatabase() {
-        const mongooseConn = new MongooseConn();
-        mongooseConn.initConn();
-    }
-}
+export = app;

@@ -1,13 +1,10 @@
-#!/usr/bin/env node
-
 /**
  * Module dependencies.
  */
-
-var app = require('../dist/app');
-var dotenv = require('dotenv');
-var debug = require('debug')('ex-ts-tutorial:server');
-var http = require('http');
+import * as app from '../src/app';
+import * as http from 'http';
+import * as debug from 'debug';
+import * as dotenv from 'dotenv';
 
 // initialize configuration
 dotenv.config();
@@ -15,14 +12,12 @@ dotenv.config();
 /**
  * Get port from environment and store in Express.
  */
-
 var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 /**
  * Create HTTP server.
  */
-
 var server = http.createServer(app);
 
 /**
